@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRealEstate.NET.FakeData", "src\OpenRealEstate.FakeData\OpenRealEstate.NET.FakeData.csproj", "{4A4C1289-36A1-4C27-A359-5AD084E74771}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRealEstate.NET.FakeData.Tests", "tests\OpenRealEstate.NET.FakeData.Tests\OpenRealEstate.NET.FakeData.Tests.csproj", "{7319BA93-540B-436B-AAA9-3113B8014ACC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4A4C1289-36A1-4C27-A359-5AD084E74771}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A4C1289-36A1-4C27-A359-5AD084E74771}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A4C1289-36A1-4C27-A359-5AD084E74771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7319BA93-540B-436B-AAA9-3113B8014ACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7319BA93-540B-436B-AAA9-3113B8014ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7319BA93-540B-436B-AAA9-3113B8014ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7319BA93-540B-436B-AAA9-3113B8014ACC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

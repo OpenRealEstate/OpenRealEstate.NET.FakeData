@@ -58,7 +58,7 @@ namespace OpenRealEstate.NET.FakeData
                                                  string state = "vic",
                                                  string countryIsoCode = "AU",
                                                  string postcode = "3121",
-                                                 bool isStreetDisplayed = true,
+                                                 string displayAddress = "2/39 Main Road, RICHMOND, vic",
                                                  decimal? latitude = null,
                                                  decimal? longitude = null)
         {
@@ -107,7 +107,7 @@ namespace OpenRealEstate.NET.FakeData
                                    .With(a => a.Latitude, latitude)
                                    .With(a => a.Longitude, longitude)
                                    .With(a => a.Postcode, postcode)
-                                   .With(a => a.DisplayAddress, null)
+                                   .With(a => a.DisplayAddress, displayAddress)
                                    .Build();
         }
     }

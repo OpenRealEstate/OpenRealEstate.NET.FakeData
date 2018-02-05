@@ -1,12 +1,12 @@
 ﻿using System;
-using OpenRealEstate.NET.Core.Land;
-using OpenRealEstate.NET.Core.Rental;
-using OpenRealEstate.NET.Core.Residential;
-using OpenRealEstate.NET.Core.Rural;
+using OpenRealEstate.Core.Land;
+using OpenRealEstate.Core.Rental;
+using OpenRealEstate.Core.Residential;
+using OpenRealEstate.Core.Rural;
 using Shouldly;
 using Xunit;
 
-namespace OpenRealEstate.NET.FakeData.Tests
+namespace OpenRealEstate.FakeData.Tests
 {
     public class CreateListingsTests : TestHelperUtilities
     {

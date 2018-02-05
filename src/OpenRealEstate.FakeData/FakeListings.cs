@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
-using OpenRealEstate.NET.Core;
-using OpenRealEstate.NET.Core.Land;
-using OpenRealEstate.NET.Core.Rental;
-using OpenRealEstate.NET.Core.Residential;
-using OpenRealEstate.NET.Core.Rural;
-using CategoryType = OpenRealEstate.NET.Core.Land.CategoryType;
+using OpenRealEstate.Core;
+using OpenRealEstate.Core.Land;
+using OpenRealEstate.Core.Rental;
+using OpenRealEstate.Core.Residential;
+using OpenRealEstate.Core.Rural;
+using CategoryType = OpenRealEstate.Core.Land.CategoryType;
 
-namespace OpenRealEstate.NET.FakeData
+namespace OpenRealEstate.FakeData
 {
     public class FakeListings
     {

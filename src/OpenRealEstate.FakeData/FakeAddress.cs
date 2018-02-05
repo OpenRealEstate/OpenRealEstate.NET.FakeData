@@ -1,8 +1,8 @@
 ﻿using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
-using OpenRealEstate.NET.Core;
+using OpenRealEstate.Core;
 
-namespace OpenRealEstate.NET.FakeData
+namespace OpenRealEstate.FakeData
 {
     public class FakeAddress
     {

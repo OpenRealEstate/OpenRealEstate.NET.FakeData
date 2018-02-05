@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRealEstate.NET.FakeData", "src\OpenRealEstate.FakeData\OpenRealEstate.NET.FakeData.csproj", "{4A4C1289-36A1-4C27-A359-5AD084E74771}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRealEstate.FakeData", "src\OpenRealEstate.FakeData\OpenRealEstate.FakeData.csproj", "{4A4C1289-36A1-4C27-A359-5AD084E74771}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRealEstate.NET.FakeData.Tests", "tests\OpenRealEstate.NET.FakeData.Tests\OpenRealEstate.NET.FakeData.Tests.csproj", "{7319BA93-540B-436B-AAA9-3113B8014ACC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRealEstate.FakeData.Tests", "tests\OpenRealEstate.FakeData.Tests\OpenRealEstate.FakeData.Tests.csproj", "{7319BA93-540B-436B-AAA9-3113B8014ACC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenRealEstate.NET.Core;
-using OpenRealEstate.NET.Core.Land;
-using OpenRealEstate.NET.Core.Rental;
-using OpenRealEstate.NET.Core.Residential;
-using OpenRealEstate.NET.Core.Rural;
+using OpenRealEstate.Core;
+using OpenRealEstate.Core.Land;
+using OpenRealEstate.Core.Rental;
+using OpenRealEstate.Core.Residential;
+using OpenRealEstate.Core.Rural;
 
-namespace OpenRealEstate.NET.FakeData.Tests
+namespace OpenRealEstate.FakeData.Tests
 {
     public abstract class TestHelperUtilities
     {

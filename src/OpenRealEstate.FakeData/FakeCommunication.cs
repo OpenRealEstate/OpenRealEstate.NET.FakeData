@@ -1,9 +1,9 @@
 ﻿using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
-using OpenRealEstate.NET.Core;
+using OpenRealEstate.Core;
 using System;
 
-namespace OpenRealEstate.NET.FakeData
+namespace OpenRealEstate.FakeData
 {
     public class FakeCommunication
     {

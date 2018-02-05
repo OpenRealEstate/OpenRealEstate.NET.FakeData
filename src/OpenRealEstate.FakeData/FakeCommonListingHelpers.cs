@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenRealEstate.NET.Core;
+using OpenRealEstate.Core;
 
-namespace OpenRealEstate.NET.FakeData
+namespace OpenRealEstate.FakeData
 {
     internal static class FakeCommonListingHelpers
     {

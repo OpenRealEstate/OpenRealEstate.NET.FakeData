@@ -33,7 +33,7 @@ build_script:
 
 test_script:
   - dotnet test tests\OpenRealEstate.FakeData.Tests -c %CONFIGURATION% -v minimal --no-restore --no-build
-  - dotnet pack -c %CONFIGURATION% /p:Version=%APPVEYOR_BUILD_VERSION% --no-build
+  - dotnet pack -c %CONFIGURATION% /p:Version=%APPVEYOR_BUILD_VERSION% --no-restore --no-build
 
 artifacts:
   - path: '**\*.nupkg'

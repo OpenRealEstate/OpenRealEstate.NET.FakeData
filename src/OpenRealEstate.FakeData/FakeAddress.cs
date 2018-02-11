@@ -55,7 +55,7 @@ namespace OpenRealEstate.FakeData
                                                  string street = "Main Road",
                                                  string suburb = "RICHMOND",
                                                  string municipality = "Yarra",
-                                                 string state = "Vic",
+                                                 string state = "Victoria",
                                                  string countryIsoCode = "AU",
                                                  string postcode = "3121",
                                                  string displayAddress = "2/39 Main Road, RICHMOND, Victoria 3121",
@@ -89,7 +89,7 @@ namespace OpenRealEstate.FakeData
 
             if (string.IsNullOrWhiteSpace(state))
             {
-                state = "VIC";
+                state = "Victoria";
             }
 
             if (string.IsNullOrWhiteSpace(postcode))

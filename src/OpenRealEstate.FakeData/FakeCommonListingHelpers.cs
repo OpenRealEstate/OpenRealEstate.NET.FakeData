@@ -41,6 +41,7 @@ namespace OpenRealEstate.FakeData
             listing.CreatedOn = new DateTime(2009, 1, 1, 12, 30, 00);
             listing.UpdatedOn = listing.CreatedOn;
             listing.StatusType = statusType;
+            SetSourceStatus(listing);
             listing.Description = description;
             listing.Title = title;
         }
@@ -193,6 +194,36 @@ namespace OpenRealEstate.FakeData
                 SoldPrice = soldPrice,
                 SoldPriceText = soldPriceText
             };
+        }
+
+        /// <summary>
+        /// Setting the SourceStatus value to be REAXml mapped values. Urgh :~(
+        /// </summary>
+        internal static void SetSourceStatus(Listing listing)
+        {
+            if (listing == null)
+            {
+                throw new ArgumentNullException(nameof(listing));
+            }
+
+            switch(listing.StatusType)
+            {
+                case StatusType.Available:
+                    listing.SourceStatus = "Current";
+                    break;
+                case StatusType.Removed:
+                    var randomInt = FizzWare.NBuilder.Generators.GetRandom.PositiveInt(3);
+                    switch(randomInt)
+                    {
+                        case 0: listing.SourceStatus = "Withdrawn"; break;
+                        case 1: listing.SourceStatus = "OffMarket"; break;
+                        case 2: listing.SourceStatus = "Deleted"; break; 
+                    }
+                    break;
+                default:
+                    listing.SourceStatus = listing.StatusType.ToDescription();
+                    break;
+            }
         }
     }
 }

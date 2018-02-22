@@ -1,24 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using FizzWare.NBuilder;
+﻿using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
 using OpenRealEstate.Core;
 using OpenRealEstate.Core.Land;
 using OpenRealEstate.Core.Rental;
 using OpenRealEstate.Core.Residential;
 using OpenRealEstate.Core.Rural;
+using System;
+using System.Collections.Generic;
 using CategoryType = OpenRealEstate.Core.Land.CategoryType;
 
 namespace OpenRealEstate.FakeData
 {
     public class FakeListings
     {
+        private static Random _random = new Random(Guid.NewGuid().GetHashCode());
+
         public static T CreateAFakeListing<T>() where T : Listing, new()
         {
+            // NBuilder fails to return the last enum type, here :(
+            // var statusType = GetRandom.Enumeration<StatusType>();
+
+            var values = EnumHelper.GetValues(typeof(StatusType));
+            var randomIndex = _random.Next(0, values.Length);
+            var statusType =  (StatusType)values.GetValue(randomIndex);
+            if (statusType == StatusType.Unknown)
+            {
+                statusType = StatusType.Available;
+            }
+
+            // Yep, copied from FakeCommonListingHelpers because that is method is (correctly) internal :/
             var listing = Builder<T>.CreateNew()
                                     .With(x => x.Id, $"listing-{GetRandom.Int()}")
                                     .With(x => x.AgencyId, $"Agency-{GetRandom.String(6)}")
-                                    .With(x => x.StatusType, StatusType.Available)
+                                    .With(x => x.StatusType, statusType) // NOTE: SourceStatus is defined AFTER this instance is created.
                                     .With(x => x.Address, FakeAddress.CreateAFakeAddress())
                                     .With(x => x.Agents, FakeAgent.CreateFakeAgents())
                                     .With(x => x.CreatedOn, GetRandom.DateTime(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow.AddDays(-1)))
@@ -37,9 +51,11 @@ namespace OpenRealEstate.FakeData
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(PropertyType)).Length);
                                             rentalListing.PropertyType = (PropertyType)Enum.GetValues(typeof(PropertyType)).GetValue(index);
                                         }
-                                    });
+                                    }).Build();
 
-            return listing.Build();
+            FakeCommonListingHelpers.SetSourceStatus(listing);
+
+            return listing;
         }
 
         public static IList<T> CreateFakeListings<T>(int numberOfFakeListings = 20) where T : Listing, new()

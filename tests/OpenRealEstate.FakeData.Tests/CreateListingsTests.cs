@@ -1,15 +1,22 @@
-﻿using System;
-using OpenRealEstate.Core.Land;
+﻿using OpenRealEstate.Core.Land;
 using OpenRealEstate.Core.Rental;
 using OpenRealEstate.Core.Residential;
 using OpenRealEstate.Core.Rural;
 using Shouldly;
+using System;
 using Xunit;
 
 namespace OpenRealEstate.FakeData.Tests
 {
     public class CreateListingsTests : TestHelperUtilities
     {
+        private readonly Random rnd = new Random(Guid.NewGuid().GetHashCode());
+
+        public virtual int Next(int min, int max)
+        {
+            return rnd.Next(min, max);
+        }
+
         [Theory]
         [InlineData(typeof(ResidentialListing))]
         [InlineData(typeof(RentalListing))]
@@ -18,7 +25,7 @@ namespace OpenRealEstate.FakeData.Tests
         public void GivenThatWeNeedASomeListings_CreateFakeListings_ReturnsASomeListings(Type type)
         {
             // Arrange.
-            const int numberOfListings = 30;
+            const int numberOfListings = 3000;
 
             // Act.
             var listings = CreateListings(type, numberOfListings);
@@ -26,7 +33,11 @@ namespace OpenRealEstate.FakeData.Tests
             // Assert.
             listings.ShouldNotBeNull();
             listings.Count.ShouldBe(numberOfListings);
-            listings.ShouldAllBe(x => x.GetType() == type);
+            listings.ShouldAllBe(listing => listing.GetType() == type);
+
+            // Make sure all our statuses exist.
+            listings.ShouldAllBe(listing => listing.StatusType != Core.StatusType.Unknown);
+            listings.ShouldAllBe(listing => !string.IsNullOrWhiteSpace(listing.SourceStatus));
         }
     }
 }

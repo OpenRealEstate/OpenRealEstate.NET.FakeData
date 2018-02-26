@@ -1,24 +1,28 @@
-﻿using System;
+﻿using FizzWare.NBuilder.Generators;
+using OpenRealEstate.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenRealEstate.Core;
 
 namespace OpenRealEstate.FakeData
 {
     internal static class FakeCommonListingHelpers
     {
-        internal static readonly HashSet<string> DefaultTags = new HashSet<string>
+        internal static HashSet<string> CreateDefaultTags()
         {
-            "houseAndLandPackage",
-            "solarPanels",
-            "waterTank",
-            "hotWaterService-gas",
-            "heating-other",
-            "balcony",
-            "shed",
-            "courtyard",
-            "isANewConstruction"
-        };
+            return new HashSet<string> 
+            {
+                "houseAndLandPackage",
+                "solarPanels",
+                "waterTank",
+                "hotWaterService-gas",
+                "heating-other",
+                "balcony",
+                "shed",
+                "courtyard",
+                "isANewConstruction"
+            };
+        }
 
         internal static void SetCommonListingData(Listing listing,
                                                   string agencyId = "XNWXNW",
@@ -27,7 +31,7 @@ namespace OpenRealEstate.FakeData
                                                       "Don't pass up an opportunity like this! First to inspect will buy! Close to local amenities and schools. Features lavishly appointed bathrooms, modern kitchen, rustic outhouse.Don't pass up an opportunity like this! First to inspect will buy! Close to local amenities and schools. Features lavishly appointed bathrooms, modern kitchen, rustic outhouse.",
                                                   string title = "SHOW STOPPER!!!")
         {
-            SetFeatures(listing, tags: DefaultTags);
+            SetFeatures(listing, tags: CreateDefaultTags());
             listing.Address = FakeAddress.CreateAFakeAddress();
             listing.Agents = FakeAgent.CreateFakeAgents().ToList();
             SetFloorPlans(listing);
@@ -70,7 +74,7 @@ namespace OpenRealEstate.FakeData
                     OpenSpaces = openSpaces
                 },
                 Toilets = toilets,
-                Tags = tags
+                Tags = tags ?? new HashSet<string>()
             };
         }
         
@@ -212,7 +216,7 @@ namespace OpenRealEstate.FakeData
                     listing.SourceStatus = "Current";
                     break;
                 case StatusType.Removed:
-                    var randomInt = FizzWare.NBuilder.Generators.GetRandom.PositiveInt(3);
+                    var randomInt = GetRandom.PositiveInt(3);
                     switch(randomInt)
                     {
                         case 0: listing.SourceStatus = "Withdrawn"; break;

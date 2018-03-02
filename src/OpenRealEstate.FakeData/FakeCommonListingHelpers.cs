@@ -42,7 +42,7 @@ namespace OpenRealEstate.FakeData
             SetVideos(listing);
 
             listing.AgencyId = agencyId;
-            listing.CreatedOn = new DateTime(2009, 1, 1, 12, 30, 00);
+            listing.CreatedOn = new DateTime(2009, 1, 1, 12, 30, 00, DateTimeKind.Utc);
             listing.UpdatedOn = listing.CreatedOn;
             listing.StatusType = statusType;
             SetSourceStatus(listing);
@@ -84,14 +84,14 @@ namespace OpenRealEstate.FakeData
             {
                 new Media
                 {
-                    Url = "http://www.realestate.com.au/tmp/floorplan1.gif",
-                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0),
+                    Url = "http://www.someWebSite.com.au/tmp/floorplan1.gif",
+                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 1
                 },
                 new Media
                 {
-                    Url = "http://www.realestate.com.au/tmp/floorplan2.gif",
-                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0),
+                    Url = "http://www.someWebSite.com.au/tmp/floorplan2.gif",
+                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 2
                 }
             };
@@ -103,14 +103,14 @@ namespace OpenRealEstate.FakeData
             {
                 new Media
                 {
-                    Url = "http://www.realestate.com.au/tmp/imageM.jpg",
-                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0),
+                    Url = "http://www.someWebSite.com.au/tmp/imageM.jpg",
+                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 1
                 },
                 new Media
                 {
-                    Url = "http://www.realestate.com.au/tmp/imageA.jpg",
-                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0),
+                    Url = "http://www.someWebSite.com.au/tmp/imageA.jpg",
+                    CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 2
                 }
             };
@@ -122,13 +122,13 @@ namespace OpenRealEstate.FakeData
             {
                 new Inspection
                 {
-                    OpensOn = new DateTime(2009, 1, 21, 11, 00, 00),
-                    ClosesOn = new DateTime(2009, 1, 21, 13, 00, 00)
+                    OpensOn = new DateTime(2009, 1, 21, 11, 00, 00, DateTimeKind.Utc),
+                    ClosesOn = new DateTime(2009, 1, 21, 13, 00, 00, DateTimeKind.Utc)
                 },
                 new Inspection
                 {
-                    OpensOn = new DateTime(2009, 1, 22, 15, 00, 00),
-                    ClosesOn = new DateTime(2009, 1, 22, 15, 30, 00)
+                    OpensOn = new DateTime(2009, 1, 22, 15, 00, 00, DateTimeKind.Utc),
+                    ClosesOn = new DateTime(2009, 1, 22, 15, 30, 00, DateTimeKind.Utc)
                 }
             };
         }

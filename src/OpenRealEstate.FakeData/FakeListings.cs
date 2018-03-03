@@ -312,12 +312,14 @@ namespace OpenRealEstate.FakeData
                 return Enumerable.Empty<Inspection>();
             }
 
-            // NOTE: yes yes .. the _random_ closed time might be BEFORE the open time :/
-            //       I'm just not sure how to handle this in a list to make sure closed > open.
             return Builder<Inspection>.CreateListOfSize(listSize)
                 .All()
                 .With(x => x.OpensOn = GetRandom.DateTime(DateTime.UtcNow.AddHours(40), DateTime.UtcNow.AddHours(50)))
-                .With(x => x.ClosesOn= GetRandom.DateTime(DateTime.UtcNow.AddHours(40), DateTime.UtcNow.AddHours(50)))
+                .Do(x =>
+                {
+                    x.OpensOn = DateTime.SpecifyKind(x.OpensOn, DateTimeKind.Utc);
+                    x.ClosesOn = DateTime.SpecifyKind(x.OpensOn.AddMinutes(30), DateTimeKind.Utc);
+                })
                 .Build();
         }
 

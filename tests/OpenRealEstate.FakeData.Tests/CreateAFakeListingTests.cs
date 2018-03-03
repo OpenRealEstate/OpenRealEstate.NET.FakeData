@@ -52,6 +52,11 @@ namespace OpenRealEstate.FakeData.Tests
             listing.ShouldNotBeNull();
             listing.CreatedOn.Kind.ShouldBe(DateTimeKind.Utc);
             listing.UpdatedOn.Kind.ShouldBe(DateTimeKind.Utc);
+            foreach (var inspection in listing.Inspections)
+            {
+                inspection.OpensOn.Kind.ShouldBe(DateTimeKind.Utc);
+                inspection.ClosesOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+            }
 
             if (listing is ResidentialListing residentialListing)
             {

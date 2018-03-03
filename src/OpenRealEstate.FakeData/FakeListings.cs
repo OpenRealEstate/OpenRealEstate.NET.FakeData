@@ -7,6 +7,7 @@ using OpenRealEstate.Core.Residential;
 using OpenRealEstate.Core.Rural;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CategoryType = OpenRealEstate.Core.Land.CategoryType;
 
 namespace OpenRealEstate.FakeData
@@ -41,9 +42,14 @@ namespace OpenRealEstate.FakeData
                                     .With(x => x.StatusType, statusType) // NOTE: SourceStatus is defined AFTER this instance is created.
                                     .With(x => x.Address, FakeAddress.CreateAFakeAddress())
                                     .With(x => x.Agents, FakeAgent.CreateFakeAgents())
+                                    .With(x => x.LandDetails, CreateLandDetails())
+                                    .With(x => x.Features, CreateFeatures())
                                     .With(x => x.CreatedOn, createdOn)
                                     .With(x => x.UpdatedOn, updatedOn)
-
+                                    .With(x => x.Images, CreateMedia(GetRandom.Int(1, 21)))
+                                    .With(x => x.FloorPlans, CreateMedia(GetRandom.Int(0, 3)))
+                                    .With(x => x.Documents, CreateMedia(GetRandom.Int(0, 4)))
+                                    .With(x => x.Inspections, CreateInspections(GetRandom.Int(0, 4)))
                                     .Do(x =>
                                     {
                                         if (x is ResidentialListing residentialListing)
@@ -52,20 +58,40 @@ namespace OpenRealEstate.FakeData
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(PropertyType)).Length);
                                             residentialListing.PropertyType = (PropertyType)Enum.GetValues(typeof(PropertyType)).GetValue(index);
                                             residentialListing.AuctionOn = DateTime.UtcNow;
+                                            residentialListing.BuildingDetails = CreateBuildingDetails();
+                                            residentialListing.Pricing = Builder<SalePricing>.CreateNew().Build();
+                                            residentialListing.Pricing = CreateSalePricing(residentialListing.StatusType);
                                         }
                                         else if (x is RentalListing rentalListing)
                                         {
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(PropertyType)).Length);
                                             rentalListing.PropertyType = (PropertyType)Enum.GetValues(typeof(PropertyType)).GetValue(index);
                                             rentalListing.AvailableOn = DateTime.UtcNow;
+                                            rentalListing.BuildingDetails = CreateBuildingDetails();
+                                            rentalListing.Pricing = Builder<RentalPricing>.CreateNew()
+                                                                                          .With(y => y.PaymentFrequencyType, PaymentFrequencyType.Weekly)
+                                                                                          .Build();
+                                            if (rentalListing.StatusType == StatusType.Available)
+                                            {
+                                                rentalListing.Pricing.RentedOn = null;
+                                            }
                                         }
                                         else if (x is LandListing landListing)
                                         {
+                                            var index = GetRandom.Int(1, Enum.GetValues(typeof(CategoryType)).Length);
+                                            landListing.CategoryType = (CategoryType)Enum.GetValues(typeof(CategoryType)).GetValue(index);
                                             landListing.AuctionOn = DateTime.UtcNow;
+                                            landListing.Estate = Builder<LandEstate>.CreateNew().Build();
+                                            landListing.Pricing = CreateSalePricing(landListing.StatusType);
                                         }
                                         else if (x is RuralListing ruralListing)
                                         {
+                                            var index = GetRandom.Int(1, Enum.GetValues(typeof(Core.Rural.CategoryType)).Length);
+                                            ruralListing.CategoryType = (Core.Rural.CategoryType)Enum.GetValues(typeof(Core.Rural.CategoryType)).GetValue(index);
                                             ruralListing.AuctionOn = DateTime.UtcNow;
+                                            ruralListing.Pricing = CreateSalePricing(ruralListing.StatusType);
+                                            ruralListing.RuralFeatures = Builder<RuralFeatures>.CreateNew().Build();
+                                            ruralListing.BuildingDetails = CreateBuildingDetails();
                                         }
 
                                     }).Build();
@@ -245,6 +271,74 @@ namespace OpenRealEstate.FakeData
                 Irrigation = "Electric pump from dam and bore.",
                 Services = "Power, telephone, airstrip, school bus, mail."
             };
+        }
+
+        private static LandDetails CreateLandDetails()
+        {
+            return Builder<LandDetails>.CreateNew()
+                                       .With(x => x.Area, Builder<UnitOfMeasure>.CreateNew().Build())
+                                       .With(x => x.Frontage, Builder<UnitOfMeasure>.CreateNew().Build())
+                                       .With(x => x.Depths, Builder<Depth>.CreateListOfSize(1).Build())
+                                       .Build();
+        }
+
+        private static Features CreateFeatures()
+        {
+            return Builder<Features>.CreateNew()
+                                    .With(x => x.CarParking, Builder<CarParking>.CreateNew().Build())
+                                    .Build();
+        }
+
+        private static IEnumerable<Media> CreateMedia(int listSize,
+                                                      string contentType = "image/jpeg")
+        {
+            if (listSize <= 0)
+            {
+                return Enumerable.Empty<Media>();
+            }
+
+            return Builder<Media>.CreateListOfSize(listSize)
+                .All()
+                .With(x => x.ContentType, contentType)
+                .With(x => x.CreatedOn, DateTime.UtcNow)
+                .With(x => x.Url = GetRandom.Url()) // Each one needs to be unique, not reusing the same value. Notice the equals (=) vs the comma (,) ways.
+                .Build();
+        }
+
+        private static IEnumerable<Inspection> CreateInspections(int listSize)
+        {
+            if (listSize <= 0)
+            {
+                return Enumerable.Empty<Inspection>();
+            }
+
+            // NOTE: yes yes .. the _random_ closed time might be BEFORE the open time :/
+            //       I'm just not sure how to handle this in a list to make sure closed > open.
+            return Builder<Inspection>.CreateListOfSize(listSize)
+                .All()
+                .With(x => x.OpensOn = GetRandom.DateTime(DateTime.UtcNow.AddHours(40), DateTime.UtcNow.AddHours(50)))
+                .With(x => x.ClosesOn= GetRandom.DateTime(DateTime.UtcNow.AddHours(40), DateTime.UtcNow.AddHours(50)))
+                .Build();
+        }
+
+        private static BuildingDetails CreateBuildingDetails()
+        {
+            return Builder<BuildingDetails>.CreateNew()
+                                           .With(x => x.Area, Builder<UnitOfMeasure>.CreateNew().Build())
+                                           .Build();
+        }
+
+        private static SalePricing CreateSalePricing(StatusType statusType)
+        {
+            var salePricing = Builder<SalePricing>.CreateNew().Build();
+            if (statusType == StatusType.Available)
+            {
+                salePricing.SoldOn = null;
+                salePricing.SoldPrice = null;
+                salePricing.SoldPriceText = null;
+            }
+
+            return salePricing;
         }
     }
 }

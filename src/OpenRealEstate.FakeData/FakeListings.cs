@@ -57,30 +57,23 @@ namespace OpenRealEstate.FakeData
                                             // Skip first enumeration -> Unknown.
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(PropertyType)).Length);
                                             residentialListing.PropertyType = (PropertyType)Enum.GetValues(typeof(PropertyType)).GetValue(index);
-                                            residentialListing.AuctionOn = DateTime.UtcNow;
+                                            residentialListing.AuctionOn = CreateDateTimeAsUtcKind(100);
                                             residentialListing.BuildingDetails = CreateBuildingDetails();
-                                            residentialListing.Pricing = Builder<SalePricing>.CreateNew().Build();
                                             residentialListing.Pricing = CreateSalePricing(residentialListing.StatusType);
                                         }
                                         else if (x is RentalListing rentalListing)
                                         {
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(PropertyType)).Length);
                                             rentalListing.PropertyType = (PropertyType)Enum.GetValues(typeof(PropertyType)).GetValue(index);
-                                            rentalListing.AvailableOn = DateTime.UtcNow;
+                                            rentalListing.AvailableOn = CreateDateTimeAsUtcKind(1000);
                                             rentalListing.BuildingDetails = CreateBuildingDetails();
-                                            rentalListing.Pricing = Builder<RentalPricing>.CreateNew()
-                                                                                          .With(y => y.PaymentFrequencyType, PaymentFrequencyType.Weekly)
-                                                                                          .Build();
-                                            if (rentalListing.StatusType == StatusType.Available)
-                                            {
-                                                rentalListing.Pricing.RentedOn = null;
-                                            }
+                                            rentalListing.Pricing = CreateRentalPricing(rentalListing.StatusType);
                                         }
                                         else if (x is LandListing landListing)
                                         {
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(CategoryType)).Length);
                                             landListing.CategoryType = (CategoryType)Enum.GetValues(typeof(CategoryType)).GetValue(index);
-                                            landListing.AuctionOn = DateTime.UtcNow;
+                                            landListing.AuctionOn = CreateDateTimeAsUtcKind(100);
                                             landListing.Estate = Builder<LandEstate>.CreateNew().Build();
                                             landListing.Pricing = CreateSalePricing(landListing.StatusType);
                                         }
@@ -88,7 +81,7 @@ namespace OpenRealEstate.FakeData
                                         {
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(Core.Rural.CategoryType)).Length);
                                             ruralListing.CategoryType = (Core.Rural.CategoryType)Enum.GetValues(typeof(Core.Rural.CategoryType)).GetValue(index);
-                                            ruralListing.AuctionOn = DateTime.UtcNow;
+                                            ruralListing.AuctionOn = CreateDateTimeAsUtcKind(100);
                                             ruralListing.Pricing = CreateSalePricing(ruralListing.StatusType);
                                             ruralListing.RuralFeatures = Builder<RuralFeatures>.CreateNew().Build();
                                             ruralListing.BuildingDetails = CreateBuildingDetails();
@@ -240,6 +233,12 @@ namespace OpenRealEstate.FakeData
             throw new Exception($"The type '{typeof(T)}' was not handled.");
         }
 
+        private static DateTime CreateDateTimeAsUtcKind(int hours = 0)
+        {
+            var dateTime = DateTime.UtcNow.AddHours(hours);
+            return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+        }
+
         private static void SetRentalPricing(RentalListing listing)
         {
             listing.Pricing = new RentalPricing
@@ -329,10 +328,12 @@ namespace OpenRealEstate.FakeData
                                            .With(x => x.Area, Builder<UnitOfMeasure>.CreateNew().Build())
                                            .Build();
         }
-
+        
         private static SalePricing CreateSalePricing(StatusType statusType)
         {
-            var salePricing = Builder<SalePricing>.CreateNew().Build();
+            var salePricing = Builder<SalePricing>.CreateNew()
+                                                  .With(x => x.SoldOn, CreateDateTimeAsUtcKind(200))
+                                                  .Build();
             if (statusType == StatusType.Available)
             {
                 salePricing.SoldOn = null;
@@ -341,6 +342,21 @@ namespace OpenRealEstate.FakeData
             }
 
             return salePricing;
+        }
+
+        private static RentalPricing CreateRentalPricing(StatusType statusType)
+        {
+            var rentalPricing = Builder<RentalPricing>.CreateNew()
+                                                      .With(x => x.RentedOn, CreateDateTimeAsUtcKind(200))
+                                                      .With(x => x.PaymentFrequencyType, PaymentFrequencyType.Monthly)
+                                                      .Build();
+
+            if (statusType != StatusType.Leased)
+            {
+                rentalPricing.RentedOn = null;
+            }
+
+            return rentalPricing;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OpenRealEstate.Core;
 using OpenRealEstate.Core.Land;
 using OpenRealEstate.Core.Rental;
@@ -58,24 +59,39 @@ namespace OpenRealEstate.FakeData.Tests
                 inspection.ClosesOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
             }
 
-            if (listing is ResidentialListing residentialListing)
-            {
-                residentialListing.AuctionOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
-            }
-
             if (listing is RentalListing rentalListing)
             {
                 rentalListing.AvailableOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+                if (rentalListing.Pricing.RentedOn.HasValue)
+                {
+                    rentalListing.Pricing.RentedOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+                }
             }
 
-            if (listing is LandListing landListing)
+            if ((listing is ISalePricing salePricing) &&
+                (salePricing.Pricing.SoldOn.HasValue))
             {
-                landListing.AuctionOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+                salePricing.Pricing.SoldOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
             }
 
-            if (listing is RuralListing ruralListing)
+            if (listing is IAuctionOn auctionOn)
             {
-                ruralListing.AuctionOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+                auctionOn.AuctionOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+            }
+
+            if (listing.Images.Any())
+            {
+                listing.Images.ShouldAllBe(x => x.CreatedOn.Value.Kind == DateTimeKind.Utc);
+            }
+
+            if (listing.FloorPlans.Any())
+            {
+                listing.FloorPlans.ShouldAllBe(x => x.CreatedOn.Value.Kind == DateTimeKind.Utc);
+            }
+
+            if (listing.Documents.Any())
+            {
+                listing.Documents.ShouldAllBe(x => x.CreatedOn.Value.Kind == DateTimeKind.Utc);
             }
         }
     }

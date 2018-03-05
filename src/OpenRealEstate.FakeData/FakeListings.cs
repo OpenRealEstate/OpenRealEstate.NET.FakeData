@@ -16,17 +16,21 @@ namespace OpenRealEstate.FakeData
     {
         private static Random _random = new Random(Guid.NewGuid().GetHashCode());
 
-        public static T CreateAFakeListing<T>() where T : Listing, new()
+        public static T CreateAFakeListing<T>(string id = null,
+                                              StatusType statusType = StatusType.Unknown) where T : Listing, new()
         {
             // NBuilder fails to return the last enum type, here :(
             // var statusType = GetRandom.Enumeration<StatusType>();
 
             var values = EnumHelper.GetValues(typeof(StatusType));
             var randomIndex = _random.Next(0, values.Length);
-            var statusType =  (StatusType)values.GetValue(randomIndex);
             if (statusType == StatusType.Unknown)
             {
-                statusType = StatusType.Available;
+                statusType =  (StatusType)values.GetValue(randomIndex);
+                if (statusType == StatusType.Unknown)
+                {
+                    statusType = StatusType.Available;
+                }
             }
 
             var createdOn = GetRandom.DateTime(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow.AddDays(-1));
@@ -37,7 +41,7 @@ namespace OpenRealEstate.FakeData
             
             // Yep, copied from FakeCommonListingHelpers because that is method is (correctly) internal :/
             var listing = Builder<T>.CreateNew()
-                                    .With(x => x.Id, $"listing-{GetRandom.Int()}")
+                                    .With(x => x.Id, id ?? $"listing-{GetRandom.Int()}")
                                     .With(x => x.AgencyId, $"Agency-{GetRandom.String(6)}")
                                     .With(x => x.StatusType, statusType) // NOTE: SourceStatus is defined AFTER this instance is created.
                                     .With(x => x.Address, FakeAddress.CreateAFakeAddress())
@@ -94,6 +98,21 @@ namespace OpenRealEstate.FakeData
             return listing;
         }
 
+        /// <summary>
+        /// Creates a list of fake OpenRealEstate instances
+        /// </summary>
+        /// <remarks>The first 20 listings have a predefined StatusType.
+        /// 1->10: Available.
+        /// 11->13: Sold or Leased.
+        /// 14->20: Removed.
+        /// 
+        /// Any listings created after #20 will have a random StatusType.
+        /// Any listings under the pre-defined 20 will still fall under the breakdown points above.
+        /// E.g. you create 12 listings, then 10x Available + 2x Sold or Leased.
+        /// </remarks>
+        /// <typeparam name="T">Listing</typeparam>
+        /// <param name="numberOfFakeListings">1 or more listings to created</param>
+        /// <returns>List of Listings.</returns>
         public static IList<T> CreateFakeListings<T>(int numberOfFakeListings = 20) where T : Listing, new()
         {
             if (numberOfFakeListings <= 0)
@@ -102,18 +121,48 @@ namespace OpenRealEstate.FakeData
                     "You need at least ONE fake listing to be requested.");
             }
 
+            // First one is hardcoded.
             var listings = new List<T> {CreateFixedListing<T>()};
 
-            // Start at 1 because the first listing should be the hard-coded one.
-            for (var i = 1; i < numberOfFakeListings; i++)
+            // Start at 2 because the first listing should be the hard-coded one.
+            // We also fix the first 20 listing status codes to be specific ones.
+            // 1->10: active
+            // 11->13: sold || leased
+            // 14->20: removed
+            for (var i = 2; i <= numberOfFakeListings; i++)
             {
-                listings.Add(CreateAFakeListing<T>());
+                // First 9 are available.
+                if (i <= 10)
+                {
+                    listings.Add(CreateAFakeListing<T>($"listing-{i}", StatusType.Available));
+                }
+
+                // Next 3 are Sold or Leased
+                else if (i <= 13)
+                {
+                    var statusType = typeof(T) == typeof(RentalListing)
+                        ? StatusType.Leased
+                        : StatusType.Sold;
+
+                    listings.Add(CreateAFakeListing<T>($"listing-{i}", statusType));
+                }
+
+                // Next 7 are Removed
+                else if (i <= 20)
+                {
+                    listings.Add(CreateAFakeListing<T>($"listing-{i}", StatusType.Removed));
+                }
+                else
+                {
+                    listings.Add(CreateAFakeListing<T>($"listing-{i}"));
+                }
             }
 
             return listings;
         }
 
         public static ResidentialListing CreateAFakeResidentialListing(string id = "Residential-Current-ABCD1234",
+                                                                       StatusType statusType = StatusType.Available,
                                                                        PropertyType propertyType = PropertyType.House)
         {
             var listing = new ResidentialListing
@@ -121,7 +170,7 @@ namespace OpenRealEstate.FakeData
                 Id = id
             };
 
-            FakeCommonListingHelpers.SetCommonListingData(listing);
+            FakeCommonListingHelpers.SetCommonListingData(listing, statusType: statusType);
             FakeCommonListingHelpers.SetBuildingDetails(listing);
             FakeCommonListingHelpers.SetSalePrice(listing);
 

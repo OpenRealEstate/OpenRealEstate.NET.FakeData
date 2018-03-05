@@ -38,8 +38,8 @@ namespace OpenRealEstate.FakeData
                 CreateAFixedAgent()
             };
 
-            // Start at 1 because the first listing should be the hard-coded one.
-            for (var i = 1; i < numberOfAgents; i++)
+            // Start at 2 because the first listing should be the hard-coded one.
+            for (var i = 2; i <= numberOfAgents; i++)
             {
                 agents.Add(CreateAFakeAgent());
             }

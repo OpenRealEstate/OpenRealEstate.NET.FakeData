@@ -1,4 +1,4 @@
-﻿using FizzWare.NBuilder;
+using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
 using OpenRealEstate.Core;
 using OpenRealEstate.Core.Land;
@@ -38,7 +38,7 @@ namespace OpenRealEstate.FakeData
             
             var updatedOn = GetRandom.DateTimeFrom(DateTime.UtcNow.AddDays(-1));
             updatedOn = DateTime.SpecifyKind(updatedOn, DateTimeKind.Utc);
-            
+
             // Yep, copied from FakeCommonListingHelpers because that is method is (correctly) internal :/
             var listing = Builder<T>.CreateNew()
                                     .With(x => x.Id, id ?? $"listing-{GetRandom.Int()}")
@@ -54,6 +54,7 @@ namespace OpenRealEstate.FakeData
                                     .With(x => x.FloorPlans, CreateMedia(GetRandom.Int(0, 3)))
                                     .With(x => x.Documents, CreateMedia(GetRandom.Int(0, 4)))
                                     .With(x => x.Inspections, CreateInspections(GetRandom.Int(0, 4)))
+                                    .With(x => x.Videos, CreateMedia(GetRandom.Int(0, 3), "application/octet-stream"))
                                     .Do(x =>
                                     {
                                         if (x is ResidentialListing residentialListing)
@@ -342,7 +343,7 @@ namespace OpenRealEstate.FakeData
         {
             if (listSize <= 0)
             {
-                return Enumerable.Empty<Media>();
+                return new List<Media>();
             }
 
             return Builder<Media>.CreateListOfSize(listSize)
@@ -357,7 +358,7 @@ namespace OpenRealEstate.FakeData
         {
             if (listSize <= 0)
             {
-                return Enumerable.Empty<Inspection>();
+                return new List<Inspection>();
             }
 
             return Builder<Inspection>.CreateListOfSize(listSize)

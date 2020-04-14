@@ -1,4 +1,4 @@
-﻿using FizzWare.NBuilder.Generators;
+using FizzWare.NBuilder.Generators;
 using OpenRealEstate.Core;
 using System;
 using System.Collections.Generic;
@@ -137,9 +137,9 @@ namespace OpenRealEstate.FakeData
         {
             var depths = new List<Depth>
             {
-                new Depth {Side = "rear", Type = "meter", Value = 40},
-                new Depth {Side = "left", Type = "meter", Value = 60},
-                new Depth {Side = "right", Type = "meter", Value = 20}
+                new Depth {Side = "rear", Value = 40},
+                new Depth {Side = "left", Value = 60},
+                new Depth {Side = "right", Value = 20}
             };
 
             listing.LandDetails = new LandDetails
@@ -147,7 +147,7 @@ namespace OpenRealEstate.FakeData
                 Area = new UnitOfMeasure {Type = "square", Value = 80},
                 CrossOver = "left",
                 Depths = depths,
-                Frontage = new UnitOfMeasure {Type = "meter", Value = 20}
+                Frontage = 20
             };
         }
 

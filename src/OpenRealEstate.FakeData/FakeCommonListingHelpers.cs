@@ -176,7 +176,7 @@ namespace OpenRealEstate.FakeData
         {
             listing.BuildingDetails = new BuildingDetails
             {
-                Area = new UnitOfMeasure {Type = "square", Value = 40},
+                Area = new UnitOfMeasure {Type = "squareMeter", Value = 40},
                 EnergyRating = 4.5M
             };
         }

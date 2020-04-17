@@ -145,7 +145,7 @@ namespace OpenRealEstate.FakeData
 
             listing.LandDetails = new LandDetails
             {
-                Area = new UnitOfMeasure {Type = "square meters", Value = 80},
+                Area = new UnitOfMeasure {Type = "squareMeter", Value = 80},
                 CrossOver = "left",
                 Sides = sides,
             };

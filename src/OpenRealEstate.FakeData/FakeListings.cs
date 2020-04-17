@@ -326,7 +326,7 @@ namespace OpenRealEstate.FakeData
         {
             return Builder<LandDetails>.CreateNew()
                                        .With(x => x.Area, Builder<UnitOfMeasure>.CreateNew().Build())
-                                       .With(x => x.Depths, Builder<Depth>.CreateListOfSize(1).Build())
+                                       .With(x => x.Sides, Builder<Side>.CreateListOfSize(1).Build())
                                        .Build();
         }
 

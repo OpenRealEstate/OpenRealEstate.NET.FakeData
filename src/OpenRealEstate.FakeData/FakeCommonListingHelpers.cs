@@ -135,19 +135,19 @@ namespace OpenRealEstate.FakeData
 
         internal static void SetLandDetails(Listing listing)
         {
-            var depths = new List<Depth>
+            var sides = new List<Side>
             {
-                new Depth {Side = "rear", Value = 40},
-                new Depth {Side = "left", Value = 60},
-                new Depth {Side = "right", Value = 20}
+                new Side {Name = "frontage", Length = new UnitOfMeasure { Type = "meter", Value = 20} },
+                new Side {Name = "rear", Length = new UnitOfMeasure { Type = "meter", Value = 40} },
+                new Side {Name = "left", Length = new UnitOfMeasure { Type = "meter", Value = 60} },
+                new Side {Name = "right", Length = new UnitOfMeasure { Type = "meter", Value = 20} }
             };
 
             listing.LandDetails = new LandDetails
             {
-                Area = new UnitOfMeasure {Type = "square", Value = 80},
+                Area = new UnitOfMeasure {Type = "square meters", Value = 80},
                 CrossOver = "left",
-                Depths = depths,
-                Frontage = 20
+                Sides = sides,
             };
         }
 

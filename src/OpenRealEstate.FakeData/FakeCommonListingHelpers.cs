@@ -137,10 +137,10 @@ namespace OpenRealEstate.FakeData
         {
             var sides = new List<Side>
             {
-                new Side {Name = "frontage", Length = new UnitOfMeasure { Type = "meter", Value = 20} },
-                new Side {Name = "rear", Length = new UnitOfMeasure { Type = "meter", Value = 40} },
-                new Side {Name = "left", Length = new UnitOfMeasure { Type = "meter", Value = 60} },
-                new Side {Name = "right", Length = new UnitOfMeasure { Type = "meter", Value = 20} }
+                new Side {Name = "frontage", Type = "meter", Value = 20 },
+                new Side {Name = "rear", Type = "meter", Value = 40 },
+                new Side {Name = "left", Type = "meter", Value = 60 },
+                new Side {Name = "right", Type = "meter", Value = 20 }
             };
 
             listing.LandDetails = new LandDetails

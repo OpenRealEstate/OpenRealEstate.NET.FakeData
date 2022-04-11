@@ -37,6 +37,7 @@ jobs:
       - name: Publish artifacts
         uses: actions/upload-artifact@v3
         with:
+          name: NuGetPackage.${{ env.RELEASE_VERSION }}
           path: ./artifacts/
 
       - name: Upload release assets

@@ -1,13 +1,3 @@
-﻿using System;
-using System.Linq;
-using OpenRealEstate.Core;
-using OpenRealEstate.Core.Land;
-using OpenRealEstate.Core.Rental;
-using OpenRealEstate.Core.Residential;
-using OpenRealEstate.Core.Rural;
-using Shouldly;
-using Xunit;
-
 namespace OpenRealEstate.FakeData.Tests
 {
     public class CreateAFakeListingTests

@@ -1,9 +1,3 @@
-﻿using OpenRealEstate.Core;
-using OpenRealEstate.Core.Residential;
-using Shouldly;
-using System.Linq;
-using Xunit;
-
 namespace OpenRealEstate.FakeData.Tests
 {
     public class CreateFakeListingsTests
@@ -18,10 +12,11 @@ namespace OpenRealEstate.FakeData.Tests
         [InlineData(17, 10, 3, 4)]
         [InlineData(21, 10, 3, 7)] // #21 is not included.
         [InlineData(50, 10, 3, 7)] // #50 is not included.
-        public void GivenTheRequirementToCreateSomeFakeListings_CreateFakeListings_ReturnsSomeListings(int numberOfListings,
-                                                                                                       int numberOfActive,
-                                                                                                       int numberOfSold,
-                                                                                                       int numberOfRemoved)
+        public void GivenTheRequirementToCreateSomeSpecificFakeListings_CreateFakeListings_ReturnsSomeListings(
+            int numberOfListings,
+            int numberOfActive,
+            int numberOfSold,
+            int numberOfRemoved)
         {
             // Arrange
             const int defaultNumberOfFixedListings = 20;
@@ -45,6 +40,20 @@ namespace OpenRealEstate.FakeData.Tests
             listings.Count(x => x.StatusType == StatusType.Sold).ShouldBe(numberOfSold);
             listings.Count(x => x.StatusType == StatusType.Leased).ShouldBe(0); // Can never have a leased residential listing.
             listings.Count(x => x.StatusType == StatusType.Removed).ShouldBe(numberOfRemoved);
+        }
+
+        [Fact]
+        public void GivenTheRequirementToCreateSomeFakeListings_CreateFakeListings_ReturnsSomeListings()
+        {
+            // Arrange & Act.
+            var listings = FakeListings.CreateFakeListings().ToList();
+
+            // Assert.
+            listings.Count.ShouldBe(80);
+            listings.GetRange(0, 20).ShouldAllBe(listing => listing is ResidentialListing);
+            listings.GetRange(20, 20).ShouldAllBe(listing => listing is RentalListing);
+            listings.GetRange(40, 20).ShouldAllBe(listing => listing is LandListing);
+            listings.GetRange(60, 20).ShouldAllBe(listing => listing is RuralListing);
         }
     }
 }

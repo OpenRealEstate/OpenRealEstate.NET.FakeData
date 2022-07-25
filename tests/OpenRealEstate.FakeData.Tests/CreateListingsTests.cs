@@ -1,11 +1,3 @@
-﻿using OpenRealEstate.Core.Land;
-using OpenRealEstate.Core.Rental;
-using OpenRealEstate.Core.Residential;
-using OpenRealEstate.Core.Rural;
-using Shouldly;
-using System;
-using Xunit;
-
 namespace OpenRealEstate.FakeData.Tests
 {
     public class CreateListingsTests : TestHelperUtilities

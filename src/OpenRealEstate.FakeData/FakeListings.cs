@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
 using OpenRealEstate.Core;
@@ -5,9 +7,6 @@ using OpenRealEstate.Core.Land;
 using OpenRealEstate.Core.Rental;
 using OpenRealEstate.Core.Residential;
 using OpenRealEstate.Core.Rural;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using CategoryType = OpenRealEstate.Core.Land.CategoryType;
 
 namespace OpenRealEstate.FakeData
@@ -16,8 +15,7 @@ namespace OpenRealEstate.FakeData
     {
         private static Random _random = new Random(Guid.NewGuid().GetHashCode());
 
-        public static T CreateAFakeListing<T>(string id = null,
-                                              StatusType statusType = StatusType.Unknown) where T : Listing, new()
+        public static T CreateAFakeListing<T>(string id = null, StatusType statusType = StatusType.Unknown) where T : Listing, new()
         {
             // NBuilder fails to return the last enum type, here :(
             // var statusType = GetRandom.Enumeration<StatusType>();
@@ -112,7 +110,7 @@ namespace OpenRealEstate.FakeData
         /// E.g. you create 12 listings, then 10x Available + 2x Sold or Leased.
         /// </remarks>
         /// <typeparam name="T">Listing</typeparam>
-        /// <param name="numberOfFakeListings">1 or more listings to created</param>
+        /// <param name="numberOfFakeListings">1 or more listings to create</param>
         /// <returns>List of Listings.</returns>
         public static IList<T> CreateFakeListings<T>(int numberOfFakeListings = 20) where T : Listing, new()
         {
@@ -162,9 +160,44 @@ namespace OpenRealEstate.FakeData
             return listings;
         }
 
-        public static ResidentialListing CreateAFakeResidentialListing(string id = "Residential-Current-ABCD1234",
-                                                                       StatusType statusType = StatusType.Available,
-                                                                       PropertyType propertyType = PropertyType.House)
+        /// <summary>
+        /// Create a list of all fake listings. Default is 20 (per type) because of the
+        /// default-rules define with the method <code>CreateFakeListings<![CDATA[>]]></code>
+        /// </summary>
+        /// <param name="numberofFakeResidentialListings">1 or more listings to create</param>
+        /// <param name="numberofFakeRentalListings"><1 or more listings to create/param>
+        /// <param name="numberofFakeLandListings">1 or more listings to create</param>
+        /// <param name="numberofFakeRuralListings">1 or more listings to create</param>
+        /// <returns></returns>
+        public static IList<Listing> CreateFakeListings(
+            int numberofFakeResidentialListings = 20,
+            int numberofFakeRentalListings = 20,
+            int numberofFakeLandListings = 20,
+            int numberofFakeRuralListings = 20)
+        {
+            var residentialListings = CreateFakeListings<ResidentialListing>(numberofFakeResidentialListings);
+            var rentalListings = CreateFakeListings<RentalListing>(numberofFakeRentalListings);
+            var landListings = CreateFakeListings<LandListing>(numberofFakeLandListings);
+            var ruralListings = CreateFakeListings<RuralListing>(numberofFakeRuralListings);
+
+            var listings = new List<Listing>(
+                numberofFakeResidentialListings +
+                numberofFakeRentalListings +
+                numberofFakeLandListings +
+                numberofFakeRuralListings);
+
+            listings.AddRange(residentialListings);
+            listings.AddRange(rentalListings);
+            listings.AddRange(landListings);
+            listings.AddRange(ruralListings);
+
+            return listings;
+        }
+
+        public static ResidentialListing CreateAFakeResidentialListing(
+            string id = "Residential-Current-ABCD1234",
+            StatusType statusType = StatusType.Available,
+            PropertyType propertyType = PropertyType.House)
         {
             var listing = new ResidentialListing
             {
@@ -182,8 +215,9 @@ namespace OpenRealEstate.FakeData
             return listing;
         }
 
-        public static RentalListing CreateAFakeRentalListing(string id = "Rental-Current-ABCD1234",
-                                                             PropertyType propertyType = PropertyType.House)
+        public static RentalListing CreateAFakeRentalListing(
+            string id = "Rental-Current-ABCD1234",
+            PropertyType propertyType = PropertyType.House)
         {
             var listing = new RentalListing()
             {
@@ -202,8 +236,9 @@ namespace OpenRealEstate.FakeData
             return listing;
         }
 
-        public static LandListing CreateAFakeLandListing(string id = "Land-Current-ABCD1234",
-                                                         PropertyType propertyType = PropertyType.House)
+        public static LandListing CreateAFakeLandListing(
+            string id = "Land-Current-ABCD1234",
+            PropertyType propertyType = PropertyType.House)
         {
             var listing = new LandListing
             {
@@ -234,8 +269,9 @@ namespace OpenRealEstate.FakeData
             return listing;
         }
 
-        public static RuralListing CreateAFakeRuralListing(string id = "Rural-Current-ABCD1234",
-                                                           PropertyType propertyType = PropertyType.House)
+        public static RuralListing CreateAFakeRuralListing(
+            string id = "Rural-Current-ABCD1234",
+            PropertyType propertyType = PropertyType.House)
         {
             var listing = new RuralListing()
             {
@@ -337,8 +373,7 @@ namespace OpenRealEstate.FakeData
                                     .Build();
         }
 
-        private static IEnumerable<Media> CreateMedia(int listSize,
-                                                      string contentType = "image/jpeg")
+        private static IEnumerable<Media> CreateMedia(int listSize, string contentType = "image/jpeg")
         {
             if (listSize <= 0)
             {

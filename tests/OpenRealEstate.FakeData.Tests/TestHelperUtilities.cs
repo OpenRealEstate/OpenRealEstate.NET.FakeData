@@ -1,12 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using OpenRealEstate.Core;
-using OpenRealEstate.Core.Land;
-using OpenRealEstate.Core.Rental;
-using OpenRealEstate.Core.Residential;
-using OpenRealEstate.Core.Rural;
-
 namespace OpenRealEstate.FakeData.Tests
 {
     public abstract class TestHelperUtilities

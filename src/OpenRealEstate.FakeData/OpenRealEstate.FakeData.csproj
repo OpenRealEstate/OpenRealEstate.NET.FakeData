@@ -2,24 +2,36 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>OpenRealEstate.FakeData</PackageId>
+    <Product>OpenRealEstate - Fake Data</Product>
     <Authors>Justin Adler</Authors>
     <Company>OpenRealEstate</Company>
-    <Product>OpenRealEstate - Fake Data</Product>
-    <PackageLicenseUrl>https://github.com/OpenRealEstate/OpenRealEstate.NET.FakeData/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <Copyright>2016</Copyright>
+    <Description>Some hardcoded and random fake data for the OpenRealEstate.NET library.</Description>
     <PackageProjectUrl>https://github.com/OpenRealEstate/OpenRealEstate</PackageProjectUrl>
+    <PackageTags>ore ore.net realestate openrealestate</PackageTags>
     <PackageIconUrl>https://avatars2.githubusercontent.com/u/7205481?s=64</PackageIconUrl>
     <RepositoryUrl>https://github.com/OpenRealEstate/OpenRealEstate.NET.FakeData</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
-    <PackageTags>ore ore.net realestate openrealestate</PackageTags>
-    <Description>Some hardcoded and random fake data for the OpenRealEstate.NET library.</Description>
-    <Copyright>2016</Copyright>
-    <PackageId>OpenRealEstate.FakeData</PackageId>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="NBuilder" Version="6.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="OpenRealEstate.Core" Version="106.0.0-beta" />
+    <PackageReference Include="OpenRealEstate.Core" Version="111.0.0-beta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

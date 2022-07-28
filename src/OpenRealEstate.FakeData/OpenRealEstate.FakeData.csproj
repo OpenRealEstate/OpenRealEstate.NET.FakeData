@@ -24,7 +24,7 @@
     </PackageReference>
     <PackageReference Include="NBuilder" Version="6.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="OpenRealEstate.Core" Version="111.0.0-beta" />
+    <PackageReference Include="OpenRealEstate.Core" Version="112.0.0-beta" />
   </ItemGroup>
 
   <ItemGroup>

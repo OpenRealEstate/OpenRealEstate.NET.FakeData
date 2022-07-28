@@ -182,11 +182,11 @@ namespace OpenRealEstate.FakeData
         }
 
         internal static void SetSalePrice(ISalePricing listing,
-                                          decimal salePrice = 500000,
+                                          int salePrice = 500000,
                                           string salePriceText = "Between $400,000 and $600,000",
                                           bool isUnderOffer = false,
                                           DateTime? soldOn = null,
-                                          decimal? soldPrice = null,
+                                          int  ? soldPrice = null,
                                           string soldPriceText = null)
         {
             listing.Pricing = new SalePricing

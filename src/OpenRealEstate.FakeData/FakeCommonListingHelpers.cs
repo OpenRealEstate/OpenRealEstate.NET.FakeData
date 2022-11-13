@@ -84,12 +84,14 @@ namespace OpenRealEstate.FakeData
             {
                 new Media
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Url = "http://www.someWebSite.com.au/tmp/floorplan1.gif",
                     CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 1
                 },
                 new Media
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Url = "http://www.someWebSite.com.au/tmp/floorplan2.gif",
                     CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 2
@@ -103,12 +105,14 @@ namespace OpenRealEstate.FakeData
             {
                 new Media
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Url = "http://www.someWebSite.com.au/tmp/imageM.jpg",
                     CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 1
                 },
                 new Media
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Url = "http://www.someWebSite.com.au/tmp/imageA.jpg",
                     CreatedOn = new DateTime(2009, 1, 1, 12, 30, 0, DateTimeKind.Utc),
                     Order = 2
@@ -166,6 +170,7 @@ namespace OpenRealEstate.FakeData
             {
                 new Media
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Url = "http://www.foo.tv/abcd.html",
                     Order = 1,
                 }

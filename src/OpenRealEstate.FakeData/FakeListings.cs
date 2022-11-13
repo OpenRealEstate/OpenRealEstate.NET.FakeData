@@ -382,6 +382,7 @@ namespace OpenRealEstate.FakeData
 
             return Builder<Media>.CreateListOfSize(listSize)
                 .All()
+                .With(x => x.Id, Guid.NewGuid().ToString())
                 .With(x => x.ContentType, contentType)
                 .With(x => x.CreatedOn, DateTime.UtcNow)
                 .With(x => x.Url = GetRandom.Url()) // Each one needs to be unique, not reusing the same value. Notice the equals (=) vs the comma (,) ways.

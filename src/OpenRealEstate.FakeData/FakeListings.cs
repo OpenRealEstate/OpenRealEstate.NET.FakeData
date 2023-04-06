@@ -13,7 +13,7 @@ namespace OpenRealEstate.FakeData
 {
     public class FakeListings
     {
-        private static Random _random = new Random(Guid.NewGuid().GetHashCode());
+        private static readonly Random Random = new Random(Guid.NewGuid().GetHashCode());
 
         public static T CreateAFakeListing<T>(string id = null, StatusType statusType = StatusType.Unknown) where T : Listing, new()
         {
@@ -21,7 +21,7 @@ namespace OpenRealEstate.FakeData
             // var statusType = GetRandom.Enumeration<StatusType>();
 
             var values = EnumHelper.GetValues(typeof(StatusType));
-            var randomIndex = _random.Next(0, values.Length);
+            var randomIndex = Random.Next(0, values.Length);
             if (statusType == StatusType.Unknown)
             {
                 statusType =  (StatusType)values.GetValue(randomIndex);
@@ -60,11 +60,10 @@ namespace OpenRealEstate.FakeData
                                             // Skip first enumeration -> Unknown.
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(PropertyType)).Length);
                                             residentialListing.PropertyType = (PropertyType)Enum.GetValues(typeof(PropertyType)).GetValue(index);
-                                            residentialListing.AuctionOn = CreateDateTimeAsUtcKind(100);
                                             residentialListing.BuildingDetails = CreateBuildingDetails();
-                                            residentialListing.Pricing = CreateSalePricing(residentialListing.StatusType);
                                         }
-                                        else if (x is RentalListing rentalListing)
+                                        
+                                        if (x is RentalListing rentalListing)
                                         {
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(PropertyType)).Length);
                                             rentalListing.PropertyType = (PropertyType)Enum.GetValues(typeof(PropertyType)).GetValue(index);
@@ -72,22 +71,25 @@ namespace OpenRealEstate.FakeData
                                             rentalListing.BuildingDetails = CreateBuildingDetails();
                                             rentalListing.Pricing = CreateRentalPricing(rentalListing.StatusType);
                                         }
-                                        else if (x is LandListing landListing)
+                                        
+                                        if (x is LandListing landListing)
                                         {
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(CategoryType)).Length);
                                             landListing.CategoryType = (CategoryType)Enum.GetValues(typeof(CategoryType)).GetValue(index);
-                                            landListing.AuctionOn = CreateDateTimeAsUtcKind(100);
                                             landListing.Estate = Builder<LandEstate>.CreateNew().Build();
-                                            landListing.Pricing = CreateSalePricing(landListing.StatusType);
                                         }
-                                        else if (x is RuralListing ruralListing)
+                                        
+                                        if (x is RuralListing ruralListing)
                                         {
                                             var index = GetRandom.Int(1, Enum.GetValues(typeof(Core.Rural.CategoryType)).Length);
                                             ruralListing.CategoryType = (Core.Rural.CategoryType)Enum.GetValues(typeof(Core.Rural.CategoryType)).GetValue(index);
-                                            ruralListing.AuctionOn = CreateDateTimeAsUtcKind(100);
-                                            ruralListing.Pricing = CreateSalePricing(ruralListing.StatusType);
                                             ruralListing.RuralFeatures = Builder<RuralFeatures>.CreateNew().Build();
                                             ruralListing.BuildingDetails = CreateBuildingDetails();
+                                        }
+
+                                        if (x is ISaleDetails saleDetails)
+                                        {
+                                            SetSaleDetails(saleDetails, statusType);
                                         }
 
                                     }).Build();
@@ -205,11 +207,27 @@ namespace OpenRealEstate.FakeData
             };
 
             FakeCommonListingHelpers.SetCommonListingData(listing, statusType: statusType);
+            listing.Address.SubNumber = "2";
+            listing.Address.LotNumber = null;
+            listing.Address.DisplayAddress = listing.Address.ToString();
+
             FakeCommonListingHelpers.SetBuildingDetails(listing);
             FakeCommonListingHelpers.SetSalePrice(listing);
 
+            var auctionOn = new DateTime(2009, 2, 04, 18, 30, 00, DateTimeKind.Utc);
+
+            SetSaleDetails(
+                listing, 
+                statusType, 
+                AuthorityType.Auction,
+                auctionOn,
+                listing.Pricing,
+                null,
+                null);
+            listing.YearBuilt = null;
+            listing.YearLastRenovated = null;
+
             listing.PropertyType = propertyType;
-            listing.AuctionOn = new DateTime(2009, 2, 4, 18, 30, 0, DateTimeKind.Utc);
             listing.CouncilRates = "$2000 per month";
 
             return listing;
@@ -225,6 +243,11 @@ namespace OpenRealEstate.FakeData
             };
 
             FakeCommonListingHelpers.SetCommonListingData(listing);
+
+            listing.Address.LotNumber = null;
+            listing.Address.StreetNumber = "2/39";
+            listing.Address.DisplayAddress = listing.Address.ToString();
+
             listing.Features.Tags.Remove("houseAndLandPackage");
 
             FakeCommonListingHelpers.SetBuildingDetails(listing);
@@ -236,9 +259,7 @@ namespace OpenRealEstate.FakeData
             return listing;
         }
 
-        public static LandListing CreateAFakeLandListing(
-            string id = "Land-Current-ABCD1234",
-            PropertyType propertyType = PropertyType.House)
+        public static LandListing CreateAFakeLandListing(string id = "Land-Current-ABCD1234")
         {
             var listing = new LandListing
             {
@@ -246,7 +267,7 @@ namespace OpenRealEstate.FakeData
             };
 
             FakeCommonListingHelpers.SetCommonListingData(listing);
-            listing.Address.StreetNumber = "LOT 12/39";
+
             listing.Features.Bedrooms = 0;
             listing.Features.Bathrooms = 0;
             listing.Features.Ensuites = 0;
@@ -254,7 +275,20 @@ namespace OpenRealEstate.FakeData
 
             FakeCommonListingHelpers.SetSalePrice(listing);
             SetLandEstate(listing);
-            listing.AuctionOn = new DateTime(2009, 1, 24, 12, 30, 00, DateTimeKind.Utc);
+
+            var auctionOn = new DateTime(2009, 1, 24, 12, 30, 00, DateTimeKind.Utc);
+
+            SetSaleDetails(
+                listing, 
+                listing.StatusType, 
+                AuthorityType.Auction,
+                auctionOn,
+                listing.Pricing,
+                null,
+                null);
+            listing.YearBuilt = null;
+            listing.YearLastRenovated = null;
+
             listing.CategoryType = CategoryType.Residential;
             listing.CouncilRates = "$2000 per month";
 
@@ -269,9 +303,7 @@ namespace OpenRealEstate.FakeData
             return listing;
         }
 
-        public static RuralListing CreateAFakeRuralListing(
-            string id = "Rural-Current-ABCD1234",
-            PropertyType propertyType = PropertyType.House)
+        public static RuralListing CreateAFakeRuralListing(string id = "Rural-Current-ABCD1234")
         {
             var listing = new RuralListing()
             {
@@ -279,15 +311,35 @@ namespace OpenRealEstate.FakeData
             };
 
             FakeCommonListingHelpers.SetCommonListingData(listing);
+            listing.Address.SubNumber = null;
+            listing.Address.LotNumber = null;
+            listing.Address.StreetNumber = "2/39";
+            listing.Address.DisplayAddress = listing.Address.ToString();
+
             listing.Features.Tags.Remove("houseAndLandPackage");
             listing.Features.Tags.Remove("isANewConstruction");
 
             FakeCommonListingHelpers.SetBuildingDetails(listing);
-            FakeCommonListingHelpers.SetSalePrice(listing);
+            FakeCommonListingHelpers.SetSalePrice(
+                listing, 
+                400000,
+                null);
 
             SetRuralFeatures(listing);
 
-            listing.AuctionOn = new DateTime(2009, 1, 24, 14, 30, 00, DateTimeKind.Utc);
+            var auctionOn = new DateTime(2009, 1, 24, 14, 30, 00, DateTimeKind.Utc);
+            
+            SetSaleDetails(
+                listing, 
+                listing.StatusType, 
+                AuthorityType.Auction,
+                auctionOn,
+                listing.Pricing,
+                null,
+                null);
+            listing.YearBuilt = null;
+            listing.YearLastRenovated = null;
+
             listing.CategoryType = Core.Rural.CategoryType.Cropping;
             listing.CouncilRates = "$2,200 per annum";
 
@@ -442,6 +494,30 @@ namespace OpenRealEstate.FakeData
             }
 
             return rentalPricing;
+        }
+
+        private static void SetSaleDetails(
+            ISaleDetails saleDetails, 
+            StatusType statusType,
+            AuthorityType? authorityType = null,
+            DateTime? auctionOn = null,
+            SalePricing salePrice = null,
+            int? yearBuilt = null,
+            int? yearLastRenovated = null)
+        {
+            var authorityIndex = GetRandom.Int(1, Enum.GetValues(typeof(AuthorityType)).Length);
+            saleDetails.Authority = authorityType ?? (AuthorityType)Enum.GetValues(typeof(AuthorityType)).GetValue(authorityIndex);
+            saleDetails.AuctionOn = auctionOn ?? CreateDateTimeAsUtcKind(100);
+            saleDetails.Pricing = salePrice ?? CreateSalePricing(statusType);
+            saleDetails.YearBuilt = yearBuilt ??
+                (GetRandom.Boolean()
+                    ? GetRandom.DateTime(DateTime.UtcNow.AddYears(-50), DateTime.UtcNow.AddYears(-5)).Year
+                    : (int?)null);
+            saleDetails.YearLastRenovated = yearLastRenovated ??
+                (saleDetails.YearBuilt.HasValue &&
+                    GetRandom.Boolean()
+                        ? GetRandom.DateTime(new DateTime(saleDetails.YearBuilt.Value, 1, 1), DateTime.UtcNow.AddYears(-1)).Year
+                        : (int?)null);
         }
     }
 }

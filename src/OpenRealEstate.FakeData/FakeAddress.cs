@@ -1,4 +1,4 @@
-﻿using FizzWare.NBuilder;
+using FizzWare.NBuilder;
 using FizzWare.NBuilder.Generators;
 using OpenRealEstate.Core;
 
@@ -51,14 +51,16 @@ namespace OpenRealEstate.FakeData
             "City of Hobsons Bay"
         };
 
-        public static Address CreateAFakeAddress(string streetNumber = "2/39",
+        public static Address CreateAFakeAddress(string subNumber = "SUB-ABC",
+                                                 string lotNumber = "LOT 123",
+                                                 string streetNumber = "2/39",
                                                  string street = "Main Road",
                                                  string suburb = "RICHMOND",
                                                  string municipality = "Yarra",
                                                  string state = "Victoria",
                                                  string countryIsoCode = "AU",
                                                  string postcode = "3121",
-                                                 string displayAddress = "2/39 Main Road, RICHMOND, Victoria 3121",
+                                                 string displayAddress = "SUB-ABC LOT 123, 2/39 Main Road, RICHMOND, Victoria 3121",
                                                  decimal? latitude = null,
                                                  decimal? longitude = null)
         {
@@ -98,6 +100,8 @@ namespace OpenRealEstate.FakeData
             }
 
             return Builder<Address>.CreateNew()
+                                   .With(a => a.SubNumber, subNumber)
+                                   .With(a => a.LotNumber, lotNumber)
                                    .With(a => a.StreetNumber, streetNumber)
                                    .With(a => a.Street, street)
                                    .With(a => a.Suburb, suburb)

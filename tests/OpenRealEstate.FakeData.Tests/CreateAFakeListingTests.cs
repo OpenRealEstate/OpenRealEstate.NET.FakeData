@@ -58,15 +58,11 @@ namespace OpenRealEstate.FakeData.Tests
                 }
             }
 
-            if ((listing is ISalePricing salePricing) &&
-                (salePricing.Pricing.SoldOn.HasValue))
+            if ((listing is ISaleDetails saleListing) &&
+                (saleListing.Pricing.SoldOn.HasValue))
             {
-                salePricing.Pricing.SoldOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
-            }
-
-            if (listing is IAuctionOn auctionOn)
-            {
-                auctionOn.AuctionOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+                saleListing.Pricing.SoldOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
+                saleListing.AuctionOn.Value.Kind.ShouldBe(DateTimeKind.Utc);
             }
 
             if (listing.Images.Any())

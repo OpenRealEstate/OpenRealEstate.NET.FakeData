@@ -14,6 +14,7 @@
     <RepositoryUrl>https://github.com/OpenRealEstate/OpenRealEstate.NET.FakeData</RepositoryUrl>
     <RepositoryType>c#</RepositoryType>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
@@ -23,8 +24,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NBuilder" Version="6.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="OpenRealEstate.Core" Version="112.0.0-beta" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="OpenRealEstate.Core" Version="122.0.0-beta" />
   </ItemGroup>
 
   <ItemGroup>

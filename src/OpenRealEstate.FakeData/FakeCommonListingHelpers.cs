@@ -33,6 +33,11 @@ namespace OpenRealEstate.FakeData
         {
             SetFeatures(listing, tags: CreateDefaultTags());
             listing.Address = FakeAddress.CreateAFakeAddress();
+            listing.Address.SubNumber = null;
+            listing.Address.LotNumber = "LOT 12";
+            listing.Address.StreetNumber = "39";
+            listing.Address.DisplayAddress = listing.Address.ToString();
+
             listing.Agents = FakeAgent.CreateFakeAgents().ToList();
             SetFloorPlans(listing);
             SetImages(listing);
@@ -186,15 +191,15 @@ namespace OpenRealEstate.FakeData
             };
         }
 
-        internal static void SetSalePrice(ISalePricing listing,
+        internal static void SetSalePrice(ISaleDetails saleListing,
                                           int salePrice = 500000,
                                           string salePriceText = "Between $400,000 and $600,000",
                                           bool isUnderOffer = false,
                                           DateTime? soldOn = null,
-                                          int  ? soldPrice = null,
+                                          int? soldPrice = null,
                                           string soldPriceText = null)
         {
-            listing.Pricing = new SalePricing
+            saleListing.Pricing = new SalePricing
             {
                 SalePrice = salePrice,
                 SalePriceText = salePriceText,
